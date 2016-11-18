@@ -1,10 +1,13 @@
 (ns aloops.main
+
   (:require [quil.core :as q]
             [quil.middleware :as m]
             [aloops.oscapi :as oscapi]
             [aloops.graphics :as g]
             [aloops.util :as u]
-            [quil.helpers.seqs :as h]))
+            [quil.helpers.seqs :as h])
+
+    (:gen-class))
 
 (def initial-width 1280)
 (def initial-height 800)
@@ -76,23 +79,25 @@
   ;(println "pasando por osc-event-fn. mensage: " message)
   (oscapi/process-osc-event state message))
 
-(q/defsketch papplet
-             :title "osc"
-             :setup setup
-             :draw draw
-             :size  [initial-width initial-height] ;; :fullscreen ;;
-             :update update-state
-             :mouse-clicked mouse-clicked
-             :osc-event osc-event
-             ;; :diplay 1
-             :features [;:keep-on-top
-                        :exit-on-close
-                        :no-bind-output
-                        :resizable
-                        ;; :present
-                        ]
-             :middleware [m/fun-mode])
 
-(oscapi/init-oscP5-communication papplet)
 
-(defn -main [& args] )
+
+
+(defn -main [& args]
+  (let [v (q/sketch 
+                    :title "osc"
+                    :setup setup
+                    :draw draw
+                    :size  [initial-width initial-height] ;; :fullscreen ;;
+                    :update update-state
+                    :mouse-clicked mouse-clicked
+                    :osc-event osc-event
+                    ;; :diplay 1
+                    :features [           ;:keep-on-top
+                               :exit-on-close
+                               :no-bind-output
+                               :resizable
+                               ;; :present
+                               ]
+                    :middleware [m/fun-mode])]
+    (oscapi/init-oscP5-communication v)))
